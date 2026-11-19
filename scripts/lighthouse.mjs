@@ -45,6 +45,13 @@ const run = (cmd, argv, timeout) => new Promise((resolve) => {
 
 const grade = (v, good, mid) => (v <= good ? ['PASS'] : v <= mid ? ['FAIL', 'medium'] : ['FAIL', 'high']);
 
+// Bot protection (403/429) blocks Lighthouse's headless Chrome after many requests. Back off once, then stop
+// hammering the store and point to PageSpeed Insights, which runs Lighthouse from Google's servers.
+const BACKOFF_MS = Number(args.backoff ?? 60) * 1000;
+const isBotWall = (lhr) => /ERRORED_DOCUMENT_REQUEST|FAILED_DOCUMENT_REQUEST/.test(lhr?.runtimeError?.code || '') && /\b(403|429)\b/.test(lhr?.runtimeError?.message || '');
+const psi = (u) => `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(u)}`;
+let botWalled = false;
+
 for (const [p, form] of targets) {
   const sfx = `${p.slug}-${form}`;
   const ids = ['SCORE', 'LCP', 'CLS', 'TBT'].map((k) => `PERF-${k}-${sfx}`);
@@ -55,9 +62,18 @@ for (const [p, form] of targets) {
   const argv = [CLI, p.url, '--output=json', '--output=html', `--output-path=${prefix}`, '--only-categories=performance,accessibility,best-practices,seo', '--chrome-flags=--headless=new --no-sandbox --disable-gpu', '--quiet'];
   if (form === 'desktop') argv.push('--preset=desktop');
   if (headerFile) argv.push(`--extra-headers=${headerFile}`);
+  const manualHint = `Run it on PageSpeed Insights instead (${psi(p.url)}) and record the result in results/manual.json with the same test ID.`;
+  if (botWalled) { blocked(`Skipped: the store's bot protection refused Lighthouse earlier in this run. ${manualHint}`); continue; }
   console.log(`[performance] lighthouse ${form} ${p.path}`);
-  const res = await run(process.execPath, argv, 240000);
-  const lhr = readJson(`${prefix}.report.json`);
+  let res = await run(process.execPath, argv, 240000);
+  let lhr = readJson(`${prefix}.report.json`);
+  if (isBotWall(lhr)) {
+    console.log(`[performance] refused by bot protection; waiting ${BACKOFF_MS / 1000}s and retrying once`);
+    await new Promise((r) => setTimeout(r, BACKOFF_MS));
+    res = await run(process.execPath, argv, 240000);
+    lhr = readJson(`${prefix}.report.json`);
+    if (isBotWall(lhr)) { botWalled = true; blocked(`Refused twice by the store's bot protection (${lhr.runtimeError.message.match(/Status code: \d+/)?.[0] || 'HTTP 403/429'}). ${manualHint}`); continue; }
+  }
   if (!lhr) { blocked(`Lighthouse produced no report (exit ${res.code}): ${res.err.trim().split('\n').pop() || 'no error output'}`); continue; }
   if (lhr.runtimeError?.code && lhr.runtimeError.code !== 'NO_ERROR') { blocked(`Lighthouse runtime error ${lhr.runtimeError.code}: ${lhr.runtimeError.message}`); continue; }
   const env = `Lighthouse ${lhr.lighthouseVersion} / ${lhr.configSettings?.formFactor} / ${lhr.configSettings?.throttlingMethod} throttling / single lab run / ${os.cpus()[0]?.model || 'unknown CPU'} (benchmarkIndex ${lhr.environment?.benchmarkIndex ?? '?'}) / ${origin}`;

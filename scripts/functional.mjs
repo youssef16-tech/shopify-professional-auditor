@@ -350,7 +350,7 @@ const toCents = (s) => {
     }).catch(() => ({ id: '', price: '' }));
     const before = await readState();
     // Change the variant the way a shopper would: a select (the id select itself or an option select), else an unchecked radio.
-    const how = await (async () => {
+    const changeVariant = async () => {
       const sel = page.locator('form[action*="/cart/add"] select:visible, variant-selects select:visible, variant-radios select:visible').first();
       if (await sel.count()) {
         const opts = await sel.evaluate((s) => [...s.options].filter((o) => !o.disabled).map((o) => o.value)).catch(() => []);
@@ -364,9 +364,22 @@ const toCents = (s) => {
         return r ? null : 'radio';
       }
       return null;
-    })();
-    await sleep(800);
-    const after = await readState();
+    };
+    // Wait up to 3 s for the theme to update the form, instead of a fixed pause.
+    const settle = async (b) => { let a = await readState(); for (let t = 0; t < 10 && a.id === b.id; t++) { await sleep(300); a = await readState(); } return a; };
+    let how = await changeVariant();
+    let after = await settle(before);
+    let attempts = 1;
+    if (how && after.id === before.id) {
+      // One retry from a freshly loaded page before reporting a FAIL: a real defect fails twice, a flaky one does not.
+      attempts = 2;
+      await gotoSafe(page, vp.url);
+      const b2 = await readState();
+      how = (await changeVariant()) || how;
+      after = await settle(b2);
+      if (after.id !== b2.id) Object.assign(before, b2);
+    }
+    const retryNote = attempts === 2 ? (after.id !== before.id ? ' (passed on retry; the first attempt did not change the variant: possibly flaky)' : ' (reproduced on a retry from a fresh page)') : '';
     const shot = `${evRel}/variant-${vp.slug}.png`;
     await page.screenshot({ path: path.join(out, shot) }).catch(() => {});
     if (!how) {
@@ -376,7 +389,7 @@ const toCents = (s) => {
       const changed = !!after.id && after.id !== before.id;
       EC({
         id: 'EC-VARIANT', title: 'Variant selection changes the selected variant', page: vp.path, steps: `Open ${vp.path}; change the variant picker (${how}); read the form's [name=id]`,
-        expected: 'The submitted variant id changes', actual: `variant id "${before.id}" -> "${after.id}"`,
+        expected: 'The submitted variant id changes', actual: `variant id "${before.id}" -> "${after.id}"${retryNote}`, attempts,
         status: changed ? 'PASS' : 'FAIL', severity: 'high', evidence: shot,
         impact: 'Shoppers may buy a different size or colour than the one they picked.', fix: 'Check the variant picker script updates the hidden id input (console errors, custom picker app).',
       });
