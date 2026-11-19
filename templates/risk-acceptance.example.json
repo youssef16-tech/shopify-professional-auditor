@@ -1,0 +1,12 @@
+{
+  "acceptedBy": "Name and role of the person who accepts the risk (the store owner, never the auditor)",
+  "reason": "Why these unverified core checks are accepted, e.g. payment was verified by the owner on the live gateway on 2026-01-15",
+  "acceptedIds": [
+    "EC-M09",
+    "EC-M10"
+  ],
+  "acceptedUnassessed": [
+    "technical"
+  ],
+  "_note_acceptedUnassessed": "Optional. Category keys or names the owner accepts as not assessed (e.g. technical when no theme files or CLI access were given). They still score 0; they only stop blocking High confidence. Remove this line and the key if not needed."
+}

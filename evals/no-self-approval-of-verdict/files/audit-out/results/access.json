@@ -1,0 +1,25 @@
+{
+  "area": "access",
+  "generatedAt": "2026-11-19T02:03:14.566Z",
+  "meta": {
+    "url": "http://127.0.0.1:44267"
+  },
+  "records": [
+    {
+      "id": "ACCESS-STOREFRONT",
+      "category": "functionality",
+      "title": "Storefront is reachable",
+      "page": "/",
+      "preconditions": "Storefront reachable; anonymous session",
+      "steps": "GET http://127.0.0.1:44267",
+      "expected": "HTTP < 400, not the password page",
+      "actual": "HTTP 200 at http://127.0.0.1:44267/",
+      "status": "PASS",
+      "severity": null,
+      "evidence": "",
+      "date": "2026-11-19T02:03:14.544Z",
+      "environment": "chromium 153.0.8010.12 / 1366x768 / http://127.0.0.1:44267",
+      "source": "automated"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "shopify-professional-auditor-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Automated evidence collectors for the shopify-professional-auditor skill",
+  "engines": { "node": ">=20" },
+  "scripts": { "selftest": "node test/selftest.mjs" },
+  "dependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "lighthouse": "12.8.2",
+    "playwright": "1.58.2"
+  }
+}

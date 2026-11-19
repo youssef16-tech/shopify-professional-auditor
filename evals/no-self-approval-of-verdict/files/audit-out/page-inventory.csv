@@ -1,0 +1,10 @@
+URL,Path,Type,Source,Selected for sample,Coverage,Checks with a result,Failed checks
+http://127.0.0.1:44267/,/,home,homepage,yes,Inspected,33,4
+http://127.0.0.1:44267/products/good-tee,/products/good-tee,product,sitemap,yes,Inspected,30,1
+http://127.0.0.1:44267/products/bad-mug,/products/bad-mug,product,sitemap,yes,Inspected,27,12
+http://127.0.0.1:44267/collections/all,/collections/all,collection,sitemap,yes,Inspected,23,0
+http://127.0.0.1:44267/pages/contact,/pages/contact,page,sitemap,yes,Inspected,22,0
+http://127.0.0.1:44267/policies/privacy-policy,/policies/privacy-policy,policy,sitemap,yes,Inspected,21,0
+http://127.0.0.1:44267/cart,/cart,cart,homepage-link,yes,Inspected,18,0
+http://127.0.0.1:44267/pages/broken,/pages/broken,page,homepage-link,yes,Inspected,1,1
+http://127.0.0.1:44267/search,/search,search,convention,yes,Inspected,14,0

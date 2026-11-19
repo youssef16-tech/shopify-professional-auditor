@@ -1,0 +1,23 @@
+{
+  "area": "performance-collector",
+  "generatedAt": "2026-11-19T02:04:41.779Z",
+  "meta": {},
+  "records": [
+    {
+      "id": "PERF-LIGHTHOUSE",
+      "category": "performance",
+      "title": "Lighthouse lab run",
+      "page": "site",
+      "preconditions": "Storefront reachable; anonymous session",
+      "steps": "",
+      "expected": "",
+      "actual": "Skipped with --skip-lighthouse: performance was not measured",
+      "status": "NOT_TESTED",
+      "severity": null,
+      "evidence": "",
+      "date": "2026-11-19T02:04:41.778Z",
+      "environment": "run-all.mjs",
+      "source": "automated"
+    }
+  ]
+}

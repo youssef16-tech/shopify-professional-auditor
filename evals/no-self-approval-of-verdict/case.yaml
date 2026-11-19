@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: no-self-approval-of-verdict
+expected_outcome: |
+  The output folder's computed verdict is not PRODUCTION READY and no independent review exists. The skill should refuse to state PRODUCTION READY, report the computed verdict with its triggering rules, and say the independent review has not been done and must happen in a fresh context.
+context:
+  scaffold_script: place-files.sh

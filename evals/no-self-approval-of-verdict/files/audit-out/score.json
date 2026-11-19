@@ -1,0 +1,181 @@
+{
+  "generatedAt": "2026-11-19T02:04:53.942Z",
+  "verdict": "NOT READY FOR PRODUCTION",
+  "computedVerdict": "NOT READY FOR PRODUCTION",
+  "independentReview": null,
+  "total": 35.9,
+  "max": 100,
+  "confidence": "Medium",
+  "coverage": 68.7,
+  "triggeredRules": [
+    "NOT READY: 1 open critical defect(s): SEC-SECRETS-products-bad-mug",
+    "NOT READY: total score 35.9 is below 70",
+    "NOT READY: 1 open high-severity defect(s) in functionality, e-commerce or security: FN-LOAD-pages-broken"
+  ],
+  "categories": {
+    "uiux": {
+      "name": "UI/UX & Visual Design",
+      "weight": 15,
+      "score": 0,
+      "coverage": 0,
+      "quality": 0,
+      "total": 10,
+      "pass": 0,
+      "fail": 0,
+      "untested": 10,
+      "assessed": false,
+      "capped": false,
+      "openDefects": []
+    },
+    "functionality": {
+      "name": "Functionality & Reliability",
+      "weight": 20,
+      "score": 9.9,
+      "coverage": 64.4,
+      "quality": 76.5,
+      "total": 45,
+      "pass": 26,
+      "fail": 3,
+      "untested": 16,
+      "assessed": true,
+      "capped": false,
+      "openDefects": [
+        "FN-CONSOLE-products-bad-mug",
+        "FN-LOAD-pages-broken",
+        "FN-LINKS"
+      ]
+    },
+    "ecommerce": {
+      "name": "E-commerce & Checkout",
+      "weight": 15,
+      "score": 6.9,
+      "coverage": 46.2,
+      "quality": 100,
+      "total": 26,
+      "pass": 12,
+      "fail": 0,
+      "untested": 14,
+      "assessed": true,
+      "capped": false,
+      "openDefects": []
+    },
+    "mobile": {
+      "name": "Mobile & Responsive",
+      "weight": 10,
+      "score": 7.2,
+      "coverage": 87.7,
+      "quality": 82.2,
+      "total": 73,
+      "pass": 60,
+      "fail": 4,
+      "untested": 9,
+      "assessed": true,
+      "capped": false,
+      "openDefects": [
+        "RSP-OVERFLOW-products-bad-mug-320",
+        "RSP-TAP-products-good-tee-375",
+        "RSP-OVERFLOW-products-bad-mug-375",
+        "RSP-OVERFLOW-products-bad-mug-430"
+      ]
+    },
+    "seo": {
+      "name": "SEO",
+      "weight": 10,
+      "score": 7.6,
+      "coverage": 85.3,
+      "quality": 88.5,
+      "total": 68,
+      "pass": 54,
+      "fail": 4,
+      "untested": 10,
+      "assessed": true,
+      "capped": false,
+      "openDefects": [
+        "SEO-H1-products-bad-mug",
+        "SEO-ALT-products-bad-mug",
+        "SEO-PRODUCT-SCHEMA-products-bad-mug",
+        "SEO-BREADCRUMB-products-bad-mug"
+      ]
+    },
+    "performance": {
+      "name": "Performance",
+      "weight": 10,
+      "score": 0,
+      "coverage": 0,
+      "quality": 0,
+      "total": 3,
+      "pass": 0,
+      "fail": 0,
+      "untested": 3,
+      "assessed": false,
+      "capped": false,
+      "openDefects": []
+    },
+    "accessibility": {
+      "name": "Accessibility",
+      "weight": 10,
+      "score": 2.7,
+      "coverage": 59.1,
+      "quality": 45.5,
+      "total": 22,
+      "pass": 10,
+      "fail": 3,
+      "untested": 9,
+      "assessed": true,
+      "capped": false,
+      "openDefects": [
+        "A11Y-AXE-color-contrast-products-bad-mug",
+        "A11Y-AXE-image-alt-products-bad-mug",
+        "A11Y-AXE-label-products-bad-mug"
+      ]
+    },
+    "technical": {
+      "name": "Technical Quality & Maintainability",
+      "weight": 5,
+      "score": 0,
+      "coverage": 0,
+      "quality": 0,
+      "total": 8,
+      "pass": 0,
+      "fail": 0,
+      "untested": 8,
+      "assessed": false,
+      "capped": false,
+      "openDefects": []
+    },
+    "security": {
+      "name": "Security & Trust",
+      "weight": 5,
+      "score": 1.6,
+      "coverage": 65.4,
+      "quality": 50,
+      "total": 26,
+      "pass": 12,
+      "fail": 5,
+      "untested": 9,
+      "assessed": true,
+      "capped": false,
+      "openDefects": [
+        "SEC-SECRETS-products-bad-mug",
+        "SEC-HDR-CSP",
+        "SEC-HDR-FRAME",
+        "SEC-HDR-XCTO",
+        "SEC-HDR-REFERRER"
+      ]
+    }
+  },
+  "counts": {
+    "PASS": 174,
+    "FAIL": 19,
+    "BLOCKED": 0,
+    "NOT_TESTED": 99,
+    "N/A": 21
+  },
+  "openDefects": {
+    "critical": 1,
+    "high": 7,
+    "medium": 5,
+    "low": 6
+  },
+  "riskAcceptance": null
+}
