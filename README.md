@@ -23,6 +23,7 @@ It inspects a storefront the way a QA engineer would and scores it out of 100. A
 - **One root cause, one defect.** A theme bug that shows up on 18 pages is scored once, and the register shows every page it affects.
 - **No self-approval.** The final verdict comes from a reviewer in a fresh context. Without that review the report prints *Independent review: NOT DONE*, and the reviewer can lower the verdict but never raise it.
 - **No verdict without evidence.** If nothing could be tested, the report says *NO VERDICT* instead of scoring the store 0.
+- **A FAIL must reproduce.** Journey checks wait for the page to settle and retry once from a fresh load before failing. When bot protection refuses Lighthouse, it backs off once, then stops and points to PageSpeed Insights.
 - **Safe by default.** Read-only. No real orders, no form submissions, no passwords in chat, no active security testing.
 
 ## Quick start
@@ -47,6 +48,35 @@ scripts/        collectors, report builder, selftest with a fixture store
 templates/      discovery doc, manual checklist (86 rows), bug report, final report
 evals/          behaviour tests for the skill (no fabricated scores, no self-approval, no real orders)
 ```
+
+## Case study: STARWORLD (starworldd.com), November 2026
+
+The first run against a real store (a live Egyptian streetwear shop on Shopify's Horizon theme) tested the tool as much as the store.
+
+**The tool was wrong about 45 of 124 "defects".** The real store exposed bugs the fixture never could:
+
+| False result | Cause | Fix in the tool |
+|---|---|---|
+| Console and network errors on every page (38) | The auditor's DNS blocker refused Shopify's own telemetry | Telemetry hosts are counted but never scored |
+| SEO and accessibility failures on `/agents.md` (7) | Shopify lists an AI-agent text file in its sitemap | Non-HTML URLs are not inspected as pages |
+| "Text under 12px" on gallery dots | Visually hidden text (font-size 0) | Hidden text is skipped |
+| Broken account links (406) | Bot protection on login pages | 405/406 count as inconclusive |
+| Cart update reported as a high-severity FAIL | Automation could not drive the theme's +/- control | Presses the + button; API-only success is BLOCKED, not FAIL |
+| One theme bug counted on up to 18 pages | Scoring per record | Scored once per root cause |
+| Variant check failed once, passed on rerun | Timing | Settle and retry before FAIL |
+| Lighthouse refused with HTTP 403 | Bot protection after repeated runs | Back off once, then fall back to PageSpeed Insights |
+
+**Real store fixes shipped** (3 theme files, through backup → unpublished preview → browser verification → file-only push to the live theme):
+the logo link got an accessible name, the gallery controls use `aria-current` instead of the invalid `aria-selected` (axe: critical), and the slide dots got a 24 px tap target.
+
+| | First run | After |
+|---|---|---|
+| Score | 30.8 | 49.2 |
+| Open defects | 124 | 70 |
+| Distinct root causes | 39 (regrouped) | 18 |
+| Mobile performance (lab) | 79 | 91 (PageSpeed Insights) |
+
+Most of the score change came from removing false positives, not from the store getting better. The verdict is still **NOT READY FOR PRODUCTION**: image links without alt text, missing meta descriptions, a duplicate product title and gallery keyboard access remain open.
 
 ## Limitations
 
